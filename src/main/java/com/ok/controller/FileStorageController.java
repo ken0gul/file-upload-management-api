@@ -21,7 +21,7 @@ import com.ok.service.StorageService;
 
 @RestController
 @RequestMapping("/api/file")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class FileStorageController {
 
 	@Autowired
