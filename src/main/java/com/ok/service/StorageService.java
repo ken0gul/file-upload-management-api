@@ -28,15 +28,19 @@ public class StorageService {
 	@Autowired
 	private AmazonS3 client;
 	
-	public String uploadFile(MultipartFile file ) {
-		String uniqueFileName =  UUID.randomUUID().toString() + "*" + file.getOriginalFilename();
-		File newFile = convertToFile(file);
-		client.putObject(new PutObjectRequest(bucketName, uniqueFileName, newFile));
+	public String uploadFile(MultipartFile[] file ) {
 		
-		// Delete it before the next file upload
-		newFile.delete();
+		for(MultipartFile f : file) {
+			
+			String uniqueFileName =  UUID.randomUUID().toString() + "*" + f.getOriginalFilename();
+			File newFile = convertToFile(f);
+			client.putObject(new PutObjectRequest(bucketName, uniqueFileName, newFile));
+			// Delete it before the next file upload
+			newFile.delete();
+		}
 		
-		return "File successfully uploaded: " + uniqueFileName;
+		
+		return "File successfully uploaded: ";
 	}
 	
 	
