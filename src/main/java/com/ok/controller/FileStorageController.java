@@ -1,6 +1,7 @@
 package com.ok.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -58,12 +59,29 @@ public class FileStorageController {
 	@GetMapping("/getAllFiles")
 	public ResponseEntity<List<String>> getAllFiles() {
 		List<S3ObjectSummary> listSummary = storageService.getAllFiles();
+
 		if (listSummary.size() != 0) {
 			
 			return new ResponseEntity<List<String>>(listSummary.stream().map(i -> i.getKey()).toList(), HttpStatus.OK);
 		} 
 		
 		return null;
+	}
+	
+	@GetMapping("/getFileInfo/{fileName}")
+	public ResponseEntity<Map<String, Object>> getSingleFileInfo(@PathVariable String fileName) {
+		return new ResponseEntity<Map<String,Object>>(storageService.getSingleFileFromS3(fileName), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getTotalSize")
+	public ResponseEntity<Long> getTotalSize() {
+		List<S3ObjectSummary> listSummary = storageService.getAllFiles();
+	if (listSummary.size() != 0) {
+			
+			return new ResponseEntity<Long>(listSummary.stream().mapToLong(item -> item.getSize()).sum(), HttpStatus.OK);
+		} 
+	
+	return null;
 	}
 }
 

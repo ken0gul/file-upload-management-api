@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.GetObjectMetadataRequest;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
@@ -82,5 +85,17 @@ public class StorageService {
 		ListObjectsV2Result result = client.listObjectsV2(bucketName);
 		List<S3ObjectSummary> list = result.getObjectSummaries();
 		return list;
+	}
+	
+	public Map<String, Object> getSingleFileFromS3(String fileName) {
+		
+		GetObjectMetadataRequest request = new GetObjectMetadataRequest(bucketName, fileName);
+		ObjectMetadata metaData = client.getObjectMetadata(request);
+		
+		return Map.of(
+				"contentLength", metaData.getContentLength(),
+				"contentType", metaData.getContentType()
+				);
+				
 	}
 }
