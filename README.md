@@ -45,4 +45,32 @@ Before running this project locally, ensure you have the following:
 
 3. Once the application is running, you can access the API endpoints to upload, fetch, update, and download files from AWS S3.
 
+## API END POINTS
+- File Upload:
+```bash
+POST /api/file/upload
+```
+- File Download:
+```bash
+GET /api/file/download/{fileName}
+```
+- File Deletion:
+ ``` bash
+  DELETE /api/file/delete/{fileName}
+```
+- File Fetch(All files):
+```bash
+GET /api/file/getAllFiles
+```
+- Get File Info:
+```bash
+GET /api/file/getFileInfo/{fileName}
+```
+
+- Get Total Size:
+```bash
+GET /api/file/getTotalSize
+```
+
+
 
